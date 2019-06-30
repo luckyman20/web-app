@@ -1,5 +1,6 @@
 /** Angular Imports */
 import { NgModule } from '@angular/core';
+import { CdkColumnDef } from '@angular/cdk/table';
 
 /** Module Imports */
 import { SharedModule } from '../shared/shared.module';
@@ -25,6 +26,9 @@ import { EditAmazonS3Component } from './external-services/amazon-s3/edit-amazon
 import { EditEmailComponent } from './external-services/email/edit-email/edit-email.component';
 import { EditNotificationComponent } from './external-services/notification/edit-notification/edit-notification.component';
 import { EditSMSComponent } from './external-services/sms/edit-sms/edit-sms.component';
+import { CreateSurveyComponent } from './manage-surveys/create-survey/create-survey.component';
+import { ViewSurveyComponent } from './manage-surveys/view-survey/view-survey.component';
+import { EditSurveyComponent } from './manage-surveys/edit-survey/edit-survey.component';
 
 @NgModule({
   imports: [
@@ -50,7 +54,11 @@ import { EditSMSComponent } from './external-services/sms/edit-sms/edit-sms.comp
     EditAmazonS3Component,
     EditEmailComponent,
     EditNotificationComponent,
-    EditSMSComponent
-  ]
+    EditSMSComponent,
+    CreateSurveyComponent,
+    ViewSurveyComponent,
+    EditSurveyComponent
+  ],
+  providers: [CdkColumnDef]
 })
 export class SystemModule { }

@@ -1,7 +1,10 @@
 /** Angular Imports */
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+
+/** Custom Services */
+import { SystemService } from '../system.service';
 
 /**
  * Manage Surveys component.
@@ -28,8 +31,11 @@ export class ManageSurveysComponent implements OnInit {
   /**
    * Retrieves the surveys data from `resolve`.
    * @param {ActivatedRoute} route Activated Route.
+   * @param {SystemService} systemService System Service.
    */
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute,
+              private systemService: SystemService,
+              private router: Router) {
     this.route.data.subscribe(( data: { surveys: any }) => {
       this.surveysData = data.surveys;
     });
@@ -74,6 +80,21 @@ export class ManageSurveysComponent implements OnInit {
    */
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  toggleSurveyStatus(surveyId: string, command: string, event: Event) {
+    event.stopPropagation();
+    this.systemService.toggleSurveyStatus(surveyId, command)
+      .subscribe((response: any) => {
+        if (command === 'activate') {
+          this.surveysData[+surveyId - 1].validFrom = new Date().getTime() - 100;
+          this.surveysData[+surveyId - 1].validTo = new Date().getTime() + 100;
+        } else if (command === 'deactivate') {
+          this.surveysData[+surveyId - 1].validFrom = new Date().getTime();
+          this.surveysData[+surveyId - 1].validTo = new Date().getTime();
+        }
+        console.log(this.surveysData[+surveyId - 1]);
+      });
   }
 
 }

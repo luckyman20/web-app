@@ -14,6 +14,9 @@ import { ManageDataTablesComponent } from './manage-data-tables/manage-data-tabl
 import { ManageHooksComponent } from './manage-hooks/manage-hooks.component';
 import { RolesAndPermissionsComponent } from './roles-and-permissions/roles-and-permissions.component';
 import { ManageSurveysComponent } from './manage-surveys/manage-surveys.component';
+import { CreateSurveyComponent } from './manage-surveys/create-survey/create-survey.component';
+import { EditSurveyComponent } from './manage-surveys/edit-survey/edit-survey.component';
+import { ViewSurveyComponent } from './manage-surveys/view-survey/view-survey.component';
 import { ManageSchedulerJobsComponent } from './manage-scheduler-jobs/manage-scheduler-jobs.component';
 import { GlobalConfigurationsComponent } from './global-configurations/global-configurations.component';
 import { EditConfigurationComponent } from './global-configurations/edit-configuration/edit-configuration.component';
@@ -39,6 +42,7 @@ import { AmazonS3ConfigurationResolver } from './external-services/amazon-s3/ama
 import { EmailConfigurationResolver } from './external-services/email/email.resolver';
 import { SMSConfigurationResolver } from './external-services/sms/sms.resolver';
 import { NotificationConfigurationResolver } from './external-services/notification/notification.resolver';
+import { ManageSurveyResolver } from './manage-surveys/manage-survey.resolver';
 
 const routes: Routes = [
   Route.withShell([
@@ -189,11 +193,42 @@ const routes: Routes = [
       },
       {
         path: 'surveys',
-        component: ManageSurveysComponent,
-        resolve: {
-              surveys: ManageSurveysResolver
-        },
         data: { title:  extract('Manage Surveys'), breadcrumb: 'Manage Surveys' },
+        children: [
+          {
+            path: '',
+            component: ManageSurveysComponent,
+            resolve: {
+              surveys: ManageSurveysResolver
+            }
+          },
+          {
+            path: 'create',
+            component: CreateSurveyComponent,
+            data: { title: extract('Create Survey'), breadcrumb: 'Create' }
+          },
+          {
+            path: ':id',
+            data: { title: extract('View Survey'), routeParamBreadcrumb: 'id' },
+            children: [
+              {
+                path: '',
+                component: ViewSurveyComponent,
+                resolve: {
+                  survey: ManageSurveyResolver
+                }
+              },
+              {
+                path: 'edit',
+                component: EditSurveyComponent,
+                data: { title: extract('Edit Survey'), routeParamBreadcrumb: false, breadcrumb: 'Edit' },
+                resolve: {
+                  survey: ManageSurveyResolver
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         path: 'scheduler-jobs',
@@ -239,6 +274,7 @@ const routes: Routes = [
     ManageHooksResolver,
     RolesAndPermissionsResolver,
     ManageSurveysResolver,
+    ManageSurveyResolver,
     ManageSchedulerJobsResolver,
     GlobalConfigurationsResolver,
     GlobalConfigurationResolver,

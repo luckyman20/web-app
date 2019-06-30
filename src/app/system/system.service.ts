@@ -54,6 +54,43 @@ export class SystemService {
   }
 
   /**
+   * @param {string} surveyId Survey ID.
+   * @returns {Observable<any>} Survey.
+   */
+  getSurvey(surveyId: string): Observable<any> {
+    return this.http.get(`/surveys/${surveyId}`);
+  }
+
+  /**
+   * @param {string} surveyId Survey ID.
+   * @param {string} command Command to be performed.
+   * @returns {Observable<any>}
+   */
+  toggleSurveyStatus(surveyId: string, command: string): Observable<any> {
+    let httpParams = new HttpParams()
+      .set('surveyId', surveyId)
+      .set('command', command);  
+    return this.http.post(`/surveys/${surveyId}?command=${command}`, { params: httpParams });
+  }
+
+  /**
+   * @param {any} survey Survey to be created.
+   * @returns {Observable<any>}
+   */
+  createSurvey(survey: any): Observable<any> {
+    return this.http.post('/surveys', survey);
+  }
+
+  /**
+   * @param {string} surveyId Survey ID.
+   * @param {any} survey Survey to be updated.
+   * @returns {Observable<any>}
+   */
+  updateSurvey(surveyId: string, survey: any): Observable<any> {
+    return this.http.put(`/surveys/${surveyId}`, survey);
+  }
+
+  /**
    * @returns {Observable<any>} Fetches Jobs.
    */
   getJobs(): Observable<any> {

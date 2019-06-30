@@ -1,0 +1,142 @@
+<div class="container">
+
+  <mat-card>
+
+    <form [formGroup]="surveyForm" (ngSubmit)="submit()">
+
+      <mat-card-content>
+
+        <div fxLayout="row wrap" fxLayoutGap="2%" fxLayout.lt-md="column">
+
+          <mat-form-field fxFlex="32%">
+            <mat-label>Key</mat-label>
+            <input matInput required formControlName="key">
+            <mat-error *ngIf="surveyForm.controls.key.hasError('required')">
+              Key is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field fxFlex="32%">
+            <mat-label>Name</mat-label>
+            <input matInput required formControlName="name">
+            <mat-error *ngIf="surveyForm.controls.name.hasError('required')">
+              Name is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field fxFlex="32%">
+            <mat-label>Country Code</mat-label>
+            <input matInput maxlength="2" required formControlName="countryCode">
+            <mat-error *ngIf="surveyForm.controls.countryCode.hasError('required')">
+              Country Code is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+
+        </div>
+
+        <div fxLayout="column">
+
+          <mat-form-field fxFlex="98%">
+            <mat-label>Description</mat-label>
+            <textarea matInput formControlName="description"></textarea>
+          </mat-form-field>
+
+        </div>
+
+        <br>
+
+        <div fxFlexFill fxLayout="row wrap" fxLayout.lt-md="column" formArrayName="questionDatas"
+          *ngFor="let questionData of questionDatas.controls; let i = index;">
+
+          <div fxFlexFill fxLayout="row wrap" fxLayoutGap="4%" fxLayout.lt-md="column" [formGroupName]="i">
+
+            <mat-divider [inset]="true"></mat-divider>
+
+            <div fxFlex="90%">
+              <h2>Question No. {{ i + 1 }}</h2>
+            </div>
+
+            <span fxFlex="2%">
+              <button *ngIf="i !== 0" type="button" mat-icon-button (click)="removeQuestionData(i)">
+                <fa-icon icon="minus-circle" size="2x"></fa-icon>
+              </button>
+              <button *ngIf="i === 0" type="button" mat-icon-button color="primary" (click)="addQuestionData()">
+                <fa-icon icon="plus-circle" size="2x"></fa-icon>
+              </button>
+            </span>
+
+            <mat-form-field fxFlex="45%">
+              <mat-label>Key</mat-label>
+              <input matInput required formControlName="key">
+              <mat-error *ngIf="questionDatas.at(i).controls.key.hasError('required')">
+                Key is <strong> required </strong>
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="45%">
+              <mat-label>Text</mat-label>
+              <input matInput required formControlName="text">
+              <mat-error *ngIf="questionDatas.at(i).controls.text.hasError('required')">
+                Text is <strong> required </strong>
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="98%">
+              <mat-label>Description</mat-label>
+              <textarea matInput formControlName="description"></textarea>
+            </mat-form-field>
+
+            <div fxFlexFill fxLayout="row wrap" fxLayout.lt-md="column" formArrayName="responseDatas"
+              *ngFor="let responseData of responseDatas(i).controls; let j = index;">
+
+              <div fxFlexFill fxLayout="row wrap" fxLayoutGap="4%" fxLayout.lt-md="column" [formGroupName]="j">
+
+                <div fxFlex="4%">
+                  <font size="4">{{ j + 1 }}.</font>
+                </div>
+
+                <mat-form-field fxFlex="35%">
+                  <mat-label>Text</mat-label>
+                  <input matInput required formControlName="text">
+                  <mat-error *ngIf="responseDatas(i).at(j).controls.text.hasError('required')">
+                    Text is <strong> required </strong>
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field fxFlex="35%">
+                  <mat-label>Value</mat-label>
+                  <input matInput type="number" required formControlName="value">
+                  <mat-error *ngIf="responseDatas(i).at(j).controls.value.hasError('required')">
+                    Value is <strong> required </strong>
+                  </mat-error>
+                </mat-form-field>
+
+                <span fxFlex="2%">
+                  <button *ngIf="j !== 0" type="button" mat-icon-button (click)="removeResponseData(i, j)">
+                    <fa-icon icon="minus-circle" size="lg"></fa-icon>
+                  </button>
+                  <button *ngIf="j === 0" type="button" mat-icon-button color="primary" (click)="addResponseData(i)">
+                    <fa-icon icon="plus-circle" size="lg"></fa-icon>
+                  </button>
+                </span>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </mat-card-content>
+
+      <mat-card-actions fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="5px">
+          <button type="button" mat-raised-button [routerLink]="['../']">Cancel</button>
+          <button mat-raised-button color="primary" [disabled]="!surveyForm.valid">Submit</button>
+        </mat-card-actions>
+
+    </form>
+
+  </mat-card>
+
+</div>
